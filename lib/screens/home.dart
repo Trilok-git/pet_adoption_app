@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -35,9 +39,9 @@ class Home extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Color(0xff1b797a),
+          backgroundColor: Theme.of(context).primaryColor,
           toolbarHeight: 120,
           title: Container(
             // color: Colors.green,
@@ -75,30 +79,30 @@ class Home extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Our Pets",style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: Color(
+                      Text("Our Pets",style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,color: isDarkMode? Colors.white: Color(
                           0xff020311)),),
 
                       BlocBuilder<CounterCubit, int>(
                         builder: (context, state) => Row(
                           children: [
-                            state==1? Icon(Icons.arrow_back_ios_new_rounded,color: Colors.grey.shade500,size: 16,)
+                            state==1? Icon(Icons.arrow_back_ios_new_rounded,color: isDarkMode?Colors.white38 :Colors.grey.shade500,size: 16,)
                             : InkWell(
                               onTap: (){
                                 context.read<PetCubit>().prevPage();
                                 context.read<CounterCubit>().getPage();
                               },
-                              child: Icon(Icons.arrow_back_ios_rounded,size: 16,),
+                              child: Icon(Icons.arrow_back_ios_rounded,size: 16,color: isDarkMode?Colors.white70 :Colors.black87),
                             ),
 
-                            Text(state.toString()+"/"+(totalPages).toString(),style: TextStyle(fontSize: 18),),
+                            Text(state.toString()+"/"+(totalPages).toString(),style: TextStyle(fontSize: 18, color: isDarkMode?Colors.white70 :Colors.black87 ),),
 
-                            state==totalPages? Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey.shade500,size: 16,)
+                            state==totalPages? Icon(Icons.arrow_forward_ios_rounded,color: isDarkMode?Colors.white38 :Colors.grey.shade500,size: 16,)
                             :InkWell(
                               onTap: (){
                                 context.read<PetCubit>().nextPage();
                                 context.read<CounterCubit>().getPage();
                               },
-                              child: Icon(Icons.arrow_forward_ios_rounded,size: 16,)
+                              child: Icon(Icons.arrow_forward_ios_rounded,size: 16, color: isDarkMode?Colors.white70 :Colors.black87,)
                             )
                           ],
                         ),
@@ -127,7 +131,7 @@ class Home extends StatelessWidget {
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
-                          childAspectRatio: 0.85,
+                          childAspectRatio: 0.83,
                           shrinkWrap: true,
                           primary: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -167,7 +171,7 @@ class Home extends StatelessWidget {
               );
             },
             backgroundColor: Colors.white,
-            foregroundColor: Color(0xff1b797a),
+            foregroundColor: Theme.of(context).primaryColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -184,6 +188,8 @@ class Home extends StatelessWidget {
 
 
   Widget SearchBar(){
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return Builder(
       builder: (context) {
         return TextFormField(
@@ -195,12 +201,13 @@ class Home extends StatelessWidget {
           autofocus: false,
           decoration: InputDecoration(
             hintText: "Search...",
-            hintStyle: TextStyle(fontSize: 16,height: 0.7),
-            fillColor: Colors.grey.shade200,
+            hintStyle: TextStyle(fontSize: 16,height: 0.7,color: isDarkMode? Colors.white :Color(
+                0xffa8a8a8)),
+            fillColor: isDarkMode? Color(0xff020212) : Colors.white,
             filled: true,
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xffafaeae))
+                borderSide: BorderSide(color: Color(0xff636363))
             ),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -213,12 +220,12 @@ class Home extends StatelessWidget {
   }
 
   Widget showCard(context, e, isAdopted) {
-    if(e.key==1) {
-      print("hello");
-      print(e.value.isAdopted);
-    }
+
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
     return Card(
-      color: isAdopted?Colors.grey.shade300 :Colors.white,
+      color: isAdopted?Colors.grey.shade300 : Theme.of(context).cardColor,
       elevation: 3,
       child: InkWell(
         onTap: (){
@@ -245,22 +252,19 @@ class Home extends StatelessWidget {
               color: isAdopted?Colors.grey :Colors.white.withOpacity(0),
               backgroundBlendMode: isAdopted? BlendMode.saturation :BlendMode.color,
             ),
+            decoration: BoxDecoration(
+              // color: isDarkMode? I
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10),
-                      bottom: Radius.circular(3)
-                  ),
-                  child: SizedBox(
-                    width: (ScreenUtil().screenWidth-55)/2,
-                    height: ((ScreenUtil().screenWidth-55)/2)*0.78,
-                    child: Hero(
-                        tag: "${e.value.id}",
-                        child: Image.asset(e.value.image,
-                          fit: BoxFit.cover,)
-                    ),
+                SizedBox(
+                  width: (ScreenUtil().screenWidth-55)/2,
+                  height: ((ScreenUtil().screenWidth-55)/2)*0.78,
+                  child: Hero(
+                      tag: "${e.value.id}",
+                      child: Image.asset(e.value.image,
+                        fit: BoxFit.cover,)
                   ),
                 ),
 

@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:EasyPet/screens/show_image.dart';
 import 'package:EasyPet/screens/utils/pet_adopted_msg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,15 +20,17 @@ class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocProvider(
       create: (context) => DetailCubit(InitialState())..loadPetDetail(petId),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Color(0xff1b797a),
+          backgroundColor: Theme.of(context).primaryColor,
           toolbarHeight: 50,
           title: Text("Details"),
           leading: InkWell(
@@ -77,7 +82,7 @@ class DetailsPage extends StatelessWidget {
                   Column(
                     // mainAxisSize: MainAxisSize.max,
                     children: [
-                      SizedBox(height: 370,),
+                      const SizedBox(height: 370,),
 
                       Container(
                         height: ScreenUtil().screenHeight -
@@ -88,7 +93,7 @@ class DetailsPage extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.vertical(top: Radius
                                 .circular(10)),
-                            color: Colors.white
+                            color: isDarkMode? Colors.black :Colors.white
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,6 +107,7 @@ class DetailsPage extends StatelessWidget {
                                   width: 90,
                                   child: Text("Name", style: GoogleFonts.lato(
                                       textStyle: TextStyle(fontSize: 22,
+                                          color: isDarkMode? Colors.white :Colors.black,
                                           fontWeight: FontWeight.w300,
                                           fontStyle: FontStyle.italic)
                                   ),),
@@ -109,6 +115,7 @@ class DetailsPage extends StatelessWidget {
 
                                 Text(":", style: GoogleFonts.lato(
                                     textStyle: TextStyle(fontSize: 22,
+                                        color: isDarkMode? Colors.white :Colors.black,
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic)
                                 ),),
@@ -118,6 +125,7 @@ class DetailsPage extends StatelessWidget {
                                 Text(pet.name,
                                   style: GoogleFonts.lato(
                                       textStyle: TextStyle(fontSize: 22,
+                                          color: isDarkMode? Colors.white :Colors.black,
                                           fontStyle: FontStyle.italic)
                                   ),),
                               ],
@@ -131,6 +139,7 @@ class DetailsPage extends StatelessWidget {
                                   width: 90,
                                   child: Text("Age", style: GoogleFonts.lato(
                                       textStyle: TextStyle(fontSize: 22,
+                                          color: isDarkMode? Colors.white :Colors.black,
                                           fontWeight: FontWeight.w300,
                                           fontStyle: FontStyle.italic)
                                   ),),
@@ -138,6 +147,7 @@ class DetailsPage extends StatelessWidget {
 
                                 Text(":", style: GoogleFonts.lato(
                                     textStyle: TextStyle(fontSize: 22,
+                                        color: isDarkMode? Colors.white :Colors.black,
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic)
                                 ),),
@@ -147,6 +157,7 @@ class DetailsPage extends StatelessWidget {
                                 Text(pet.age,
                                   style: GoogleFonts.lato(
                                       textStyle: TextStyle(fontSize: 22,
+                                          color: isDarkMode? Colors.white :Colors.black,
                                           fontStyle: FontStyle.italic)
                                   ),),
                               ],
@@ -160,6 +171,7 @@ class DetailsPage extends StatelessWidget {
                                   width: 90,
                                   child: Text("Price", style: GoogleFonts.lato(
                                       textStyle: TextStyle(fontSize: 22,
+                                          color: isDarkMode? Colors.white :Colors.black,
                                           fontWeight: FontWeight.w300,
                                           fontStyle: FontStyle.italic)
                                   ),),
@@ -167,6 +179,7 @@ class DetailsPage extends StatelessWidget {
 
                                 Text(":", style: GoogleFonts.lato(
                                     textStyle: TextStyle(fontSize: 22,
+                                        color: isDarkMode? Colors.white :Colors.black,
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FontStyle.italic)
                                 ),),
@@ -177,6 +190,7 @@ class DetailsPage extends StatelessWidget {
                                   "₹ " + pet.price.toString(),
                                   style: GoogleFonts.lato(
                                       textStyle: TextStyle(fontSize: 22,
+                                          color: isDarkMode? Colors.white :Colors.black,
                                           fontStyle: FontStyle.italic)
                                   ),),
                               ],
@@ -233,7 +247,7 @@ class DetailsPage extends StatelessWidget {
                                           Colors.white),
                                       backgroundColor: MaterialStateProperty
                                           .all(
-                                          Color(0xff1b797a)),
+                                          Theme.of(context).primaryColor),
                                       fixedSize: MaterialStateProperty.all(
                                           Size(screenWidth - 30, 50))
                                   ),

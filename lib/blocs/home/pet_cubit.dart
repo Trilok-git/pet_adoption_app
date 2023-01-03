@@ -26,8 +26,6 @@ class PetCubit extends Cubit<HomeState> {
     //get adopted pet's id from SharedPref
     final prefs = await SharedPreferences.getInstance();
     final List<String>? adoptedPet = prefs.getStringList('adoptedPets');
-    print(adoptedPet);
-    print("here....");
     if(adoptedPet!=null) {
       DetailCubit.adoptedPetId = adoptedPet;
 
@@ -115,8 +113,6 @@ class PetCubit extends Cubit<HomeState> {
   Future<void> refresh() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String>? adoptedPet = prefs.getStringList('adoptedPets');
-    print(adoptedPet);
-    print("here....");
     if(adoptedPet!=null) {
       DetailCubit.adoptedPetId = adoptedPet;
 

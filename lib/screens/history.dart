@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,17 +64,18 @@ class History extends StatelessWidget {
   }
 
   showCard(Pet Pet) {
-
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
       child: Container(
         height: 140,
         width: screenWidth,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkMode? Colors.black87 :Colors.white,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
-            BoxShadow(color: Colors.grey.shade400,offset: Offset(0,1),spreadRadius: 1,blurRadius: 2)
+            BoxShadow(color: isDarkMode? Colors.grey.shade600 :Colors.grey.shade400,offset: Offset(0,1),spreadRadius: 1,blurRadius: 2)
           ]
         ),
         child: Row(
@@ -96,13 +98,13 @@ class History extends StatelessWidget {
                   children: [
                     Text("Name",style:GoogleFonts.acme(fontSize: 15,color: Colors.grey.shade400)),
                     SizedBox(height: 5,),
-                    Text(Pet.name,style: GoogleFonts.acme(fontSize: 17,color: Color(0xff052031))),
+                    Text(Pet.name,style: GoogleFonts.acme(fontSize: 17,color: isDarkMode? Colors.white: Color(0xff052031))),
 
                     SizedBox(height: 15,),
 
                     Text("Age",style:GoogleFonts.acme(fontSize: 15,color: Colors.grey.shade400)),
                     SizedBox(height: 5,),
-                    Text(Pet.age,style: GoogleFonts.acme(fontSize: 17,color: Color(0xff052031))),
+                    Text(Pet.age,style: GoogleFonts.acme(fontSize: 17,color: isDarkMode? Colors.white: Color(0xff052031))),
 
                   ],
                 ),
@@ -117,7 +119,7 @@ class History extends StatelessWidget {
                   children: [
                     Text("Price",style:GoogleFonts.acme(fontSize: 15,color: Colors.grey.shade400)),
                     SizedBox(height: 5,),
-                    Text("₹ ${Pet.price}",style: GoogleFonts.acme(fontSize: 17,color: Color(0xff052031))),
+                    Text("₹ ${Pet.price}",style: GoogleFonts.acme(fontSize: 17,color: isDarkMode? Colors.white: Color(0xff052031))),
 
                   ],
                 ),
